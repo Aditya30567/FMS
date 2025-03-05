@@ -1,5 +1,6 @@
 using CityService.Interface;
 using CityService.Models;
+using CityService.Process;
 using CityService.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<CityServiceDbContext>(option =>
     option.UseSqlServer(connstr);
 });
 builder.Services.AddScoped<ICity, CityRepository>();
+builder.Services.AddScoped<CityProcess>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

@@ -22,5 +22,28 @@ namespace CityService.Process
             }
             return await  _repo.AddCity(city);
         }
+        public async Task<City> UpdateCity(int cityId,City city)
+        {
+            if (_repo.GetCityById(cityId) == null)
+            {
+                throw new ArgumentNullException(nameof(city));
+            }
+            return await _repo.UpdateCity(cityId,city);
+        }
+        public async Task<City> GetCityById(int cityId)
+        {
+            return await _repo.GetCityById(cityId);
+        }
+        
+        public async Task<bool> DeleteCity(int cityId)
+        {
+            return await _repo.DeleteCity(cityId);
+        }
+       public async Task<City> UpdateAirportCharge(int cityId, int airportCharge)
+        {
+            return await _repo.UpdateAirportCharge(cityId, airportCharge);
+        }
+       
+       
     }
 }

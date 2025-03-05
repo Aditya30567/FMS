@@ -21,4 +21,8 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FMSLibrary\FMSLibrary.csproj" />
+  </ItemGroup>
+
 </Project>

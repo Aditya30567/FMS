@@ -2,8 +2,10 @@
 using CityService.Models;
 using CityService.Process;
 using CityService.Repository;
+using FMSLibrary.UserDefinedException;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
 namespace CityService.Controllers
 {
@@ -43,8 +45,12 @@ namespace CityService.Controllers
         {
             try
             {
-                var res = await repo.UpdateCity(cityId, city);
-                return Ok("Updated Data Succussfully");
+                var res = await process.UpdateCity(cityId, city);
+                return Ok(res);
+            }
+            catch(IdNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
@@ -57,9 +63,13 @@ namespace CityService.Controllers
         {
             try
             {
-                var res=await repo.DeleteCity(cityId);
+                var res=await process.DeleteCity(cityId);
                 return Ok("Deleted city successfully");
-            }catch(Exception ex)
+            }catch(IdNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -83,10 +93,14 @@ namespace CityService.Controllers
         {
             try
             {
-                var res= await repo.GetCityById(cityId);
-                if (res is null) throw new Exception("Not found");
+                var res= await process.GetCityById(cityId);
+                //if (res is null) throw new Exception("Not found");
                 return Ok(res);
-            }catch(Exception ex)
+            }catch(IdNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(Exception ex)
             {
                 return NotFound(ex.Message);
             }
@@ -97,9 +111,15 @@ namespace CityService.Controllers
         {
             try
             {
-                var res = await repo.UpdateAirportCharge(cityId, airportCharge);
-                if (res is null) throw new Exception("Not Found");
+                var res = await process.UpdateAirportCharge(cityId, airportCharge);
                 return Ok(res);
+            }catch(ArgumentNullException ex)
+            {
+                return NotFound(new { message=ex.Message, Source= ex.TargetSite.Name, ExceptionType= ex.GetType().FullName });
+            }
+            catch(IdNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

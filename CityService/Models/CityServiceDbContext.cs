@@ -35,8 +35,7 @@ public partial class CityServiceDbContext : DbContext
             entity.Property(e => e.CityName).HasMaxLength(100);
             entity.Property(e => e.State).HasMaxLength(100);
             entity.Property(e => e.Status)
-                .HasMaxLength(10)
-                .HasDefaultValue("Active");
+                 .HasDefaultValue(true); 
         });
 
         OnModelCreatingPartial(modelBuilder);
