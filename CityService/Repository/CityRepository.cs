@@ -1,5 +1,5 @@
 ﻿using CityService.Interface;
-using CityService.Models;
+using FMSLibrary.Models;
 using FMSLibrary.UserDefinedException;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -10,7 +10,8 @@ namespace CityService.Repository
 
     {
         CityServiceDbContext dbContext;
-        public CityRepository(CityServiceDbContext dbContext) { 
+        public CityRepository(CityServiceDbContext dbContext)
+        {
             this.dbContext = dbContext;
         }
 
@@ -24,11 +25,20 @@ namespace CityService.Repository
         {
             try
             {
-                var res = await dbContext.Cities.FirstOrDefaultAsync(c => c.CityId == cityId);
+                var res =await dbContext.Cities.FirstOrDefaultAsync(c => c.CityId == cityId);
                 if (res == null) throw new IdNotFoundException("Not found with this id");
                 return res;
-            }catch(Exception ex)
+            }
+            catch (TaskCanceledException ex)
             {
+                // Log the exception details
+                Console.WriteLine($"Task was canceled: {ex.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                Console.WriteLine($"An error occurred: {ex.Message}");
                 throw;
             }
         }
@@ -36,6 +46,9 @@ namespace CityService.Repository
         {
             try
             {
+                if (city == null) throw new ArgumentException("Data cant be null");
+                var res = dbContext.Cities.FirstOrDefault(c => c.CityId == city.CityId);
+                if (res != null) throw new Exception("Id already Exist");
                 dbContext.Cities.Add(city);
                 await dbContext.SaveChangesAsync();
                 return true;
@@ -53,7 +66,7 @@ namespace CityService.Repository
                 var res = await dbContext.Cities.FirstOrDefaultAsync(c => c.CityId == cityId);
                 if (res == null) throw new IdNotFoundException("Id not found");
                 //dbContext.Cities.Remove(res);
-                res.Status =false ;
+                res.Status = false;
                 await dbContext.SaveChangesAsync();
                 return true;
             }
@@ -75,7 +88,7 @@ namespace CityService.Repository
                 return res;
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw;
             }
@@ -83,20 +96,20 @@ namespace CityService.Repository
 
         public async Task<City> UpdateCity(int cityId, City city)
         {
-          
+
             try
             {
                 var res = await dbContext.Cities.FirstOrDefaultAsync(c => c.CityId == cityId);
-                if (res == null)  throw new IdNotFoundException("Id not found");
+                if (res == null) throw new IdNotFoundException("Id not found");
                 res.State = city.State;
                 res.CityCode = city.CityCode;
                 res.CityName = city.CityName;
                 await dbContext.SaveChangesAsync();
                 return res;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                throw; 
+                throw;
             }
         }
     }

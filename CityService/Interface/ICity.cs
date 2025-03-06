@@ -1,4 +1,5 @@
-﻿using CityService.Models;
+﻿
+using FMSLibrary.Models;
 
 namespace CityService.Interface
 {
@@ -6,7 +7,7 @@ namespace CityService.Interface
     {
         Task<bool> AddCity(City city);
         Task<City> UpdateCity(int cityId, City city);
-        Task<bool>  DeleteCity(int cityId);
+        Task<bool> DeleteCity(int cityId);
         Task<City> UpdateAirportCharge(int cityId, int airportCharge);
         Task<IEnumerable<City>> GetAllData();
         Task<City> GetCityById(int cityId);

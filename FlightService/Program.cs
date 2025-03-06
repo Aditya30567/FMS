@@ -1,34 +1,28 @@
-using CityService.Interface;
-using CityService.Process;
-using CityService.Repository;
+using FlightService.Process;
+using FlightService.Repository;
 using FMSLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole(); 
-var connstr = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<CityServiceDbContext>(option =>
-{
-    option.UseSqlServer(connstr);
+builder.Services.AddSwaggerGen(options => {
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "v1",
+        Version = "v1",
+    });
 });
-builder.Services.AddScoped<ICity, CityRepository>();
-builder.Services.AddScoped<CityProcess>();
+builder.Services.AddDbContext<FlightDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddScoped<IFlight, FlightRepository>();
+builder.Services.AddScoped<FlightProcess>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "My API",
-        Version = "v1"
-    });
-});
 
 var app = builder.Build();
 

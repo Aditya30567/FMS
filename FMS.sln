@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityService", "CityService\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMSLibrary", "FMSLibrary\FMSLibrary.csproj", "{14856642-BCF5-42FF-9748-4834A5C91731}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlightService", "FlightService\FlightService.csproj", "{14FE6F9F-719D-45FA-8E26-13C890E48B10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{14856642-BCF5-42FF-9748-4834A5C91731}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14856642-BCF5-42FF-9748-4834A5C91731}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14856642-BCF5-42FF-9748-4834A5C91731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14FE6F9F-719D-45FA-8E26-13C890E48B10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14FE6F9F-719D-45FA-8E26-13C890E48B10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14FE6F9F-719D-45FA-8E26-13C890E48B10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14FE6F9F-719D-45FA-8E26-13C890E48B10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
