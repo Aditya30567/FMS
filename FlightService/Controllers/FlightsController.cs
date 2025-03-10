@@ -10,6 +10,7 @@ using FlightService.Process;
 using FMSLibrary.UserDefinedException;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace FlightService.Controllers
 {
@@ -21,7 +22,7 @@ namespace FlightService.Controllers
 
         public FlightsController(FlightProcess process)
         {
-            this.process= process;
+            this.process = process;
         }
 
         [HttpPost("add")]
@@ -29,27 +30,27 @@ namespace FlightService.Controllers
         {
             try
             {
-                var res=await process.AddFlight(flight);
+                var res = await process.AddFlight(flight);
                 return Ok("Added data successfully");
-            }catch(IdNotFoundException ex)
+            } catch (IdNotFoundException ex)
             {
                 return NotFound(ex.Message);
-            }catch (Exception ex)
+            } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
         [HttpGet("getFlight")]
-        public async Task<ActionResult<IEnumerable<Flight>>> GetFlightByDepartureDate([FromQuery]string from, [FromQuery] string to, [FromQuery] DateOnly date)
+        public async Task<ActionResult<IEnumerable<Flight>>> GetFlightByDepartureDate([FromQuery] string from, [FromQuery] string to, [FromQuery] DateOnly date)
         {
             try
             {
-                var res=await process.GetFlightByDepartureDate(from,to,date);
+                var res = await process.GetFlightByDepartureDate(from, to, date);
                 return Ok(res);
-            }catch(IdNotFoundException ex)
+            } catch (IdNotFoundException ex)
             {
                 return NotFound(ex.Message);
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -72,7 +73,7 @@ namespace FlightService.Controllers
             }
         }
         [HttpPut("update/{flightId}")]
-        public async Task<ActionResult<Flight>> UpdateAvailableSeat(int flightId, int AvailableSeat)
+        public async Task<ActionResult<Flight>> UpdateAvailableSeat(int flightId,[FromQuery] int AvailableSeat)
         {
             try
             {
@@ -89,16 +90,16 @@ namespace FlightService.Controllers
             }
         }
         [HttpPut("updateFlightDetail/{flightId}")]
-        public async Task<ActionResult<Flight>> UpdateFlightDetails(int flightId,Flight flight)
+        public async Task<ActionResult<Flight>> UpdateFlightDetails(int flightId, Flight flight)
         {
             try
             {
-                var res=await process.UpdateFlight(flightId, flight);
+                var res = await process.UpdateFlight(flightId, flight);
                 return Ok(res);
-            }catch(IdNotFoundException ex)
+            } catch (IdNotFoundException ex)
             {
                 return NotFound(ex.Message);
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -111,14 +112,30 @@ namespace FlightService.Controllers
             {
                 var res = await process.GetFlightById(flightId);
                 return Ok(res);
-            }catch(IdNotFoundException ex)
+            } catch (IdNotFoundException ex)
             {
                 return NotFound(ex.Message);
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpGet("error")]
+        //public IActionResult HandleError() {
+
+        //    var exHandler = HttpContext.Features.Get<IExceptionHandlerFeature>();
+        //    return Problem(
+        //    detail: exHandler.Error.Message, 
+        //    instance: exHandler.Error.Source, 
+        //    statusCode: StatusCodes.Status500InternalServerError, 
+        //    title: "Error", 
+        //    type: exHandler.Error.GetType().FullName, 
+        //    ,
+        //}
+        //    );
+    
+        
+
     }
     
 }

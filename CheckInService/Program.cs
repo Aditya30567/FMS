@@ -1,5 +1,5 @@
-using FlightService.Process;
-using FlightService.Repository;
+using CheckInService.Process;
+using CheckInService.Repository;
 using FMSLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -7,19 +7,22 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSwaggerGen(options => {
-    options.SwaggerDoc("v1", new OpenApiInfo
+builder.Services.AddDbContext<CheckInDbContext>(c =>
+{
+    c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<ICheckIn, CheckInRepository>();
+builder.Services.AddScoped<CheckInProcess>();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "v1",
+        Title = "My API",
         Version = "v1",
     });
 });
-builder.Services.AddDbContext<FlightDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-builder.Services.AddScoped<IFlight, FlightRepository>();
-builder.Services.AddScoped<FlightProcess>();
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -33,10 +36,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
+        c.SwaggerEndpoint("swagger/v1/swagger.json", "My API v1");
     });
 }
-//app.UseExceptionHandler("/error");
 
 app.UseAuthorization();
 

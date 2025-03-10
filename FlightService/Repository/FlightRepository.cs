@@ -23,7 +23,7 @@ namespace FlightService.Repository
                 dbContext.Flights.Add(flight);
                 await dbContext.SaveChangesAsync();
                 return true;
-            }catch(Exception)
+            }catch(Exception ex)
             {
                 throw;
             }

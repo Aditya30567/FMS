@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace FMSLibrary.Models;
 
@@ -19,5 +20,6 @@ public partial class Passenger
 
     public bool IsActive { get; set; }
 
-    public virtual Booking Booking { get; set; } = null!;
+    [JsonIgnore]
+    public virtual Booking? Booking { get; set; } 
 }
