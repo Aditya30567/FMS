@@ -40,7 +40,10 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
     });
 }
-
+app.UseCors(c =>
+{
+    c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+});
 app.UseAuthorization();
 
 app.MapControllers();

@@ -7,12 +7,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace FareService.Repositroy
 {
-    public class FareRepository:IFare
+    public class FareRepository : IFare
     {
         private readonly FareDbContext _context;
         public FareRepository(FareDbContext context)
         {
             _context = context;
+        }
+        public async Task<IEnumerable<Fare>> GetAllFare()
+        {
+            return await _context.Fares.ToListAsync();
         }
         public async Task<Fare> GetFareById(int fareId)
         {
@@ -44,10 +48,10 @@ namespace FareService.Repositroy
                 throw;
             }
         }
-        
+
         public async Task<bool> AddFare(Fare fare)
         {
-            
+
             try
             {
                 if (fare is null) throw new ArgumentException("fare Data can't be null");
@@ -58,10 +62,10 @@ namespace FareService.Repositroy
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw;
-            
+
             }
         }
 
@@ -73,13 +77,13 @@ namespace FareService.Repositroy
                 if (fare is null) throw new ArgumentException("fare Data can't be null");
                 var res = await _context.Fares
                     .FirstOrDefaultAsync(c => c.FareId == fare.FareId);
-                if (res is  null) throw new IdNotFoundException("Id not found");
+                if (res is null) throw new IdNotFoundException("Id not found");
                 res.BasePrice = fare.BasePrice;
-                res.ConvenienceFee= fare.ConvenienceFee;
+                res.ConvenienceFee = fare.ConvenienceFee;
                 await _context.SaveChangesAsync();
                 return res;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -88,7 +92,7 @@ namespace FareService.Repositroy
         {
             try
             {
-                if (fareId <0 || conveninceFees<0) throw new Exception("Fare Value cant be null");
+                if (fareId < 0 || conveninceFees < 0) throw new Exception("Fare Value cant be null");
                 var res = await _context.Fares
                     .FirstOrDefaultAsync(c => c.FareId == fareId);
                 if (res is null) throw new IdNotFoundException("Id not found");
@@ -100,5 +104,7 @@ namespace FareService.Repositroy
                 throw;
             }
         }
+    
+       
     }
 }

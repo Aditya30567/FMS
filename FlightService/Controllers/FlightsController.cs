@@ -114,7 +114,12 @@ namespace FlightService.Controllers
                 return Ok(res);
             } catch (IdNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new FaultContract
+                {
+                    StatusCode=404,
+                    ErrorMessage=ex.Message,
+                    Details="Flight id not found"
+                });
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -133,8 +138,24 @@ namespace FlightService.Controllers
         //    ,
         //}
         //    );
-    
-        
+
+        [HttpGet("getFlightSource")]
+        public async Task<IActionResult> GetFlightByStation([FromQuery] string from, [FromQuery] string to, [FromQuery] DateOnly date)
+        {
+            try
+            {
+                var res = await process.GetFlightByStation(from, to, date);
+                return Ok(res);
+            }
+            catch (IdNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
     

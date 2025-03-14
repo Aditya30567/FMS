@@ -16,16 +16,16 @@ namespace CheckInService.Process
         }
         public async Task<(bool success,string message,string seatAlloted)> CheckInAsync(int bookingId)
         {
-            var response = await http.GetAsync("http://localhost:7005/api/bookings/{bookingId}");
+            var response = await http.GetAsync($"http://localhost:7005/api/Booking/{bookingId}");
             //call the bookingId controller in booking services
             if (!response.IsSuccessStatusCode)
             {
                 return (false, "Booking not found", string.Empty);
             }
             var bookingData = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-            var bookingStatus=bookingData.RootElement.GetProperty("Status").GetString();
+            var bookingStatus=bookingData.RootElement.GetProperty("status").GetString();
             if(bookingStatus=="Checked-In") return (false,"Already Exist",string.Empty);
-            var updatedResponse = await http.PutAsync("http://localhost:7005/api/booking/checkin/{bookingId}", null);
+            var updatedResponse = await http.PutAsync($"http://localhost:7005/api/booking/checkin/{bookingId}", null);
             if (!updatedResponse.IsSuccessStatusCode)
             {
                 return (false, "Check-in failed", string.Empty);

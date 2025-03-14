@@ -19,8 +19,9 @@ namespace BookingService.Repository
         }
         public async Task<Booking> GetBookingById(int bookingId)
         {
+            //if (bookingId < 0) throw new Exception("Invalid booking Id type");
             var res = await context.Bookings.Include(c=>c.Passengers).FirstOrDefaultAsync(c => c.BookingId == bookingId);
-            if (res == null) throw new IdNotFoundException("Id not found");
+            if (res == null) throw new IdNotFoundException("Booking Id not found");
             return res;
 
         }

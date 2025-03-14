@@ -1,5 +1,6 @@
 ﻿using FareService.Repostiory;
 using FMSLibrary.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FareService.Process
 {
@@ -29,6 +30,10 @@ namespace FareService.Process
         public async Task<Fare> GetFareById(int fareId)
         {
             return await repo.GetFareById(fareId);
+        }
+        public async Task<IEnumerable<Fare>> GetAllFare()
+        {
+            return await repo.GetAllFare();
         }
     }
 }

@@ -10,5 +10,6 @@ namespace FareService.Repostiory
         Task<Fare> UpdateConveninceFee(int fareId, int conveninceFees);
         Task<Fare> GetFareById(int fareId);
         Task<Fare> GetFareByFlightById(int flightId);
+        Task<IEnumerable<Fare>> GetAllFare();
     }
 }

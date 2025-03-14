@@ -1,5 +1,7 @@
 ﻿using BookingService.Repository;
 using FMSLibrary.Models;
+using Microsoft.EntityFrameworkCore.Storage.Json;
+using Newtonsoft.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -27,6 +29,7 @@ namespace BookingService.Process
             //}
 
             var res = await repo.AddBooking(booking);
+            //if(repo.GetBookingById(booking.BookingId)is not null) throw new Exception("")
 
             // Validate if data was inserted
             if (res == null || res.BookingId == 0)
@@ -101,6 +104,35 @@ namespace BookingService.Process
         //{
         //    return await repo.AddPassenger(passenger);
         //}
+        public async Task<Tuple<Flight,List<Passenger>,Booking>> GetAllBookingDetailsWithFlight(int bookingId)
+        {
+            var booking = await repo.GetBookingById(bookingId);
+            //if(booking is null) throw new Exception()
+            Flight? flightData = null;
+            //if (booking == null) throw new Exception("Booking is not found");
+            var response = await http.GetAsync($"http://localhost:7002/api/Flights/{booking.FlightId}");
+            if (response.IsSuccessStatusCode)
+            {
+                string jsonString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Json String", jsonString);
+                try
+                {
+                    flightData = JsonConvert.DeserializeObject<Flight>(jsonString);
+                }
+                catch (Newtonsoft.Json.JsonException ex)
+                {
+                    Console.WriteLine($"JSON Deserialization Error: {ex.Message}");
+                }
+            }
+            if (flightData is null) throw new Exception("No flight associated with this booking number");
+            //Console.WriteLine(response);
+            var passengerName = booking.Passengers.ToList();
+            return Tuple.Create(flightData, passengerName,booking);
+             
+        }
+       
+            
+            
         
     }
 }

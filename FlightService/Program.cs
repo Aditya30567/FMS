@@ -18,6 +18,7 @@ builder.Services.AddDbContext<FlightDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IFlight, FlightRepository>();
 builder.Services.AddScoped<FlightProcess>();
 builder.Services.AddControllers();
@@ -37,6 +38,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 //app.UseExceptionHandler("/error");
+app.UseCors(c =>
+{
+    c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+});
 
 app.UseAuthorization();
 

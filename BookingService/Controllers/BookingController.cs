@@ -4,6 +4,7 @@ using FMSLibrary.Models;
 using FMSLibrary.UserDefinedException;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BookingService.Controllers
 {
@@ -53,15 +54,24 @@ namespace BookingService.Controllers
         {
             try
             {
+
                 var booking = await process.GetBookingById(bookingId);
-                return Ok(new
+                //return Ok(new
+                //{
+                //    BookingId = booking.BookingId,
+                //    Status = booking.Status,
+                //    IsActive = booking.IsActive,
+                //    PassengerCount = booking.Passengers.Count
+                //});
+                return Ok(booking);
+            }catch (IdNotFoundException ex)
+            {
+                return NotFound(new FaultContract
                 {
-                    BookingId = booking.BookingId,
-                    Status = booking.Status,
-                    IsActive = booking.IsActive,
-                    PassengerCount = booking.Passengers.Count
+                    StatusCode = 404,
+                    ErrorMessage = ex.Message,
+                    Details = "Booking not found with given id"
                 });
-                //return Ok(booking);
             }
             catch (Exception ex)
             {
@@ -90,6 +100,33 @@ namespace BookingService.Controllers
                     ErrorMessage = ex.Message,
                     Details = "Error"
                 });
+            }
+        }
+        [HttpGet("flightDetailsWithId/{bookingId}")]
+        public async Task<IActionResult> GetAllBookingDetailsWithFlight(int bookingId)
+        {
+            try
+            {
+                //if (bookingId.GetType() != typeof(int)) throw new Exception("Invalid Type");
+                var (flightDatawithId, list,booking) = await process.GetAllBookingDetailsWithFlight(bookingId);
+                return Ok(new
+                {
+                    flightData=flightDatawithId,
+                    passengerDetails=list,
+                    bookingDetails=booking
+                });
+            }catch(IdNotFoundException ex)
+            {
+                return NotFound(new FaultContract
+                {
+                    StatusCode = 404,
+                    ErrorMessage = ex.Message,
+                    Details = "Booking is not found"
+                });
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

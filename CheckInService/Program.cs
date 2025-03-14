@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "My API",
-        Version = "v1",
+        Version = "v1"
     });
 });
 
@@ -36,9 +36,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("swagger/v1/swagger.json", "My API v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
     });
 }
+app.UseCors(c =>
+{
+    c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+});
 
 app.UseAuthorization();
 

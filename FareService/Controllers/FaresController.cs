@@ -191,7 +191,19 @@ namespace FareService.Controllers
                 });
             }
         }
-        
+        [HttpGet("allFare")]
+        public async Task<IActionResult> GetAllFare()
+        {
+            try
+            {
+                var res = await process.GetAllFare();
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
    
     }
 }
